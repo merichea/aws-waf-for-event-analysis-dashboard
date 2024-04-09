@@ -22,7 +22,8 @@ Resources:
         S3Targets:
           - Path: !Sub 's3://${S3BucketName}/AWSLogs/'
       Schedule:
-        ScheduleExpression: cron(0 */1 * * ? *)
+        ScheduleExpression: cron(0 1 * * ? *)
+      Configuration: '{"Version":1.0,"CrawlerOutput":{"Partitions":{"AddOrUpdateBehavior":"InheritFromTable"}}}'
   waflogsGlueCrawlerRole:
     Type: 'AWS::IAM::Role'
     Properties:

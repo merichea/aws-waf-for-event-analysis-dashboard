@@ -4,6 +4,8 @@ During major online events like live broadcasts, security teams need a fast and 
  
 This project demonstrates using AWS Glue crawlers to categorize and structure WAF flow log data and Amazon Athena for querying. Amazon Quicksight is then employed to visualize query results in a dashboard. Once deployed, the dashboard provides traffic visualization similar to the example graphs shown in _Images_ folder in under project , empowering security teams with insight into attacks and defense.
 
+For more information: please check the related workshop https://catalog.us-east-1.prod.workshops.aws/workshops/520cb1cc-0fc5-4408-8fbe-d9527bc59d2d/en-US
+
 **Architecture Principles**
 
 ![architecture](/Images/Waf-dashboard-Architecture.png)
@@ -48,15 +50,6 @@ The Amazon Quicksight User will have access to the AWS WAF for Event Analysis Da
 8. Review the details on the final screen and under **“Capabilities”** check the box for **“I acknowledge that AWS CloudFormation might create IAM resources with custom names”**
 9. Choose **Submit**
 
-Once the Stack is created successfully, you will see the following resources deployed:
-AWS Glue Crawler, AWS Glue Database and the corresponding AWS IAM Roles and Policies are created successfully.
-
-10. go to the **Crawlers**  section in AWS Glue, and select the crawler that has been created as part of the cloudformation stack you have just deployed. It should be named " crawl-aws-waf-logs"
-11. Edit the Crawler configuration, and edit the **Step 4: Set output and scheduling**
-12. Under **Advanced options** select **"Update all new and existing partitions with metadata from the table"**. Select **Next ** and then **Update**.
-13. Select the crawler "crawl-aws-waf-logs" and hit **run**. This will create a table within the database. As per this project, we set the frequency of crawnler's run at once a day. This can be changes by editing the crawler.
-
-
 **Step3 : Prepare Amazon QuickSight**
 
  Amazon QuickSight is the AWS Business Intelligence tool that will allow you to not only view the Standard AWS provided insights into all of your accounts, but will also allow to produce new versions of the Dashboards we provide or create something entirely customized to you. If you are already a regular Amazon QuickSight user you can skip these steps. 
@@ -71,11 +64,11 @@ AWS Glue Crawler, AWS Glue Database and the corresponding AWS IAM Roles and Poli
 **Step4 : Deploy the Dashboard**
 
 
-We will be using the **AWS-WAF-Logs-Dashboard-For-Event-Analysis.yaml** template to deploy the dashboard in the quicksight. This template will also create a dataset in Amazon Quicksight.
+We will be using the **WAF-logs-Dashboard-for-DDoS-Analysis-Quicksight-Template.yaml** template to deploy the dashboard in the quicksight. This template will also create a dataset in Amazon Quicksight.
 
 1. Open your favorite terminal, under the directory where you saved AWS-WAF-Logs-Dashboard-For-Event-Analysis.yaml template and run the following cli:
 
-`cid-cmd deploy --resources ./AWS-WAF-Logs-Dashboard-For-Event-Analysis.yaml` 
+`cid-cmd deploy --resources ./WAF-logs-Dashboard-for-DDoS-Analysis-Quicksight-Template.yaml` 
 
 2. during the creation you will be prompted to select: 
 [dashboard-id] Please select dashboard to install: 
@@ -93,7 +86,17 @@ after a successful run , the output will be :
 ####### AWS-WAF-Logs-Dashboard-For-Event-Analysis-V1 is available at: https://[region].quicksight.aws.amazon.com/sn/dashboards/AWS_WAF_For_Event_Analysis_Dashboard_name
 #######
 ```
-You can now start analysing your traffic pattern.
+You can now start analyzing your traffic pattern (you'll be able to analyze traffic from the past 3 months)
+
+**FAQ:**
+1. If you get the following error whith the "waf_logs_antiddos_least_fields_v2" Dataset:
+sourceErrorCode: 100071
+[Simba]AthenaJDBC An error has been thrown from the AWS Athena client. Permission denied on S3 path: s3://xxxxxxxx
+sourceErrorState:	HY000
+sourceException:	java.sql.SQLException
+sourceType:	ATHENA
+
+Please check  https://docs.aws.amazon.com/quicksight/latest/user/athena.html to fix the problem
 
 
 
